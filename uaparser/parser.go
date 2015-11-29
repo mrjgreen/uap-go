@@ -3,7 +3,6 @@ package uaparser
 import (
 	"bytes"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"reflect"
 	"regexp"
@@ -11,6 +10,8 @@ import (
 	"strings"
 	"sync"
 	"unicode"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Parser struct {
@@ -171,13 +172,15 @@ func (parser *Parser) ParseDevice(line string) *Device {
 	found := false
 	for _, dvcPattern := range parser.DevicePatterns {
 		dvcPattern.Match(line, dvc)
-		if len(dvc.Family) > 0 {
+		if len(dvc.Device) > 0 {
 			found = true
 			break
 		}
 	}
 	if !found {
-		dvc.Family = "Other"
+		dvc.Device = "Other"
+		dvc.Brand = "Other"
+		dvc.Model = "Other"
 	}
 	return dvc
 }
